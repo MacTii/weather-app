@@ -94,6 +94,7 @@ public class SavedCities extends Fragment implements ClickListenerFinder {
             viewModel.setFavoriteCity(city);
 //            ((MainActivity) requireActivity()).setCityFavorite(city);
 //            ((MainActivity) requireActivity()).createFile();
+            Toast.makeText(requireActivity().getApplicationContext(), "City selected", Toast.LENGTH_SHORT).show();
         }else {
             Toast.makeText(requireActivity().getApplicationContext(), "Town doesn't exist", Toast.LENGTH_SHORT).show();
         }

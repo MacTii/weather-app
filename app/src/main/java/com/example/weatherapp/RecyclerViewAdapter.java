@@ -11,8 +11,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.weatherapp.R;
-
 import java.util.ArrayList;
 
 class RecyclerViewAdapterFinder extends RecyclerView.Adapter<RecyclerViewAdapterFinder.ViewHolderFinder>{
@@ -33,7 +31,7 @@ class RecyclerViewAdapterFinder extends RecyclerView.Adapter<RecyclerViewAdapter
         if(viewType == R.layout.fragment_city_row) {
             view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_city_row, parent, false);
         }else{
-            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_finder, parent, false);
+            view = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_favorite, parent, false);
         }
         view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
         int height = view.getMeasuredHeight();
@@ -53,7 +51,7 @@ class RecyclerViewAdapterFinder extends RecyclerView.Adapter<RecyclerViewAdapter
 
     @Override
     public int getItemViewType(final int position) {
-        return (position == 0) ? R.layout.fragment_finder : R.layout.fragment_city_row;
+        return (position == 0) ? R.layout.fragment_favorite : R.layout.fragment_city_row;
     }
 
     @Override
