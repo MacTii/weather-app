@@ -89,7 +89,7 @@ public class SavedCities extends Fragment implements ClickListenerFinder {
 
     private void loadNewFragment(String city){
         if(getLocationFromAddress(city)!=null) {
-            updateCityFile();
+            //updateCityFile();
 //            ((MainActivity) requireActivity()).setTextViewCity(city);
             viewModel.setFavoriteCity(city);
 //            ((MainActivity) requireActivity()).setCityFavorite(city);
@@ -121,6 +121,7 @@ public class SavedCities extends Fragment implements ClickListenerFinder {
     public void onClickTrash(int position) {
         cityList.remove(position);
         adapter.notifyItemRemoved(position+1);
+        updateCityFile();
     }
 
     @Override
@@ -128,14 +129,15 @@ public class SavedCities extends Fragment implements ClickListenerFinder {
         loadNewFragment(cityList.get(position));
     }
 
-    @Override
-    public void onClickApply(int position, String city) {
-        loadNewFragment(city);
-    }
+//    @Override
+//    public void onClickApply(int position, String city) {
+//        loadNewFragment(city);
+//    }
 
     @Override
     public void onClickAddToFavorite(int position, String city) {
         cityList.add(0,city);
         adapter.notifyItemInserted(position+1); // ????
+        updateCityFile();
     }
 }

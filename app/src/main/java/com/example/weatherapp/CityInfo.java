@@ -39,6 +39,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -48,12 +49,6 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class CityInfo extends Fragment {
-
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    private String mParam1;
-    private String mParam2;
 
     private TextView cityNameTV, temperatureTV, conditionTV;
     private RecyclerView weatherRV;
@@ -75,8 +70,13 @@ public class CityInfo extends Fragment {
     void setCityName(String cityName) {
         this.cityName = cityName;
     }
+
     void setData(String data) { this.data = data; }
     String getData() { return data; }
+
+    void getDataValues(String str) {
+        dataValues = str.split(System.lineSeparator());
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -112,11 +112,11 @@ public class CityInfo extends Fragment {
         getWeatherInfo(cityName);
 
         setData(readFromFile(getActivity()));
-        // System.out.println(getData());
-
         getDataValues(getData());
-//        for(String val: dataValues)
+//        for(String val : dataValues)
 //            System.out.println(val);
+
+//        System.out.println("ELO " + dataValues[0] + " WHOT " + dataValues[1]);
 
         searchIV.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,10 +140,6 @@ public class CityInfo extends Fragment {
         });
     }
 
-    void getDataValues(String str) {
-        dataValues = str.split(System.lineSeparator());
-    }
-
     @Override
     public void onResume() {
         super.onResume();
@@ -153,9 +149,10 @@ public class CityInfo extends Fragment {
 
     @SuppressLint("SetTextI18n")
     void putDataValues() {
-        temperatureTV.setText(dataValues[1] + "°C");
-        conditionTV.setText(dataValues[2]);
-        Picasso.get().load("https://openweathermap.org/img/wn/".concat(dataValues[3]).concat("@2x.png")).into(iconIV);
+        cityNameTV.setText(dataValues[1]);
+        temperatureTV.setText(dataValues[2] + "°C");
+        conditionTV.setText(dataValues[3]);
+        // Picasso.get().load("https://openweathermap.org/img/wn/".concat(dataValues[3]).concat("@2x.png")).into(iconIV);
     }
 
     private String readFromFile(Context context) {
@@ -257,7 +254,8 @@ public class CityInfo extends Fragment {
                     weatherRVAdapter.notifyDataSetChanged();
 
                     //zapis do stringa
-                    String dt = String.valueOf(df.format(temperatureFloat)) + '\n'
+                    String dt = cityNameTV.getText().toString() + '\n'
+                            + String.valueOf(df.format(temperatureFloat)) + '\n'
                             + condition + '\n'
                             + conditionIcon + '\n'
                             + String.valueOf(df.format(temperatureFeelFloat)) + '\n'
@@ -288,8 +286,11 @@ public class CityInfo extends Fragment {
                 System.out.println(error);
                 if(error instanceof NoConnectionError)
                 {
-                    putDataValues();
-                    viewModel.setWeatherData(new CityMoreInfoModal(dataValues[4] + "°C",dataValues[5] + "°C",dataValues[6] + "°C",dataValues[7] + "hPa",dataValues[8] + "hPa",dataValues[9] + "hPa",dataValues[10] + "%", dataValues[11]));
+                    File file = new File(getActivity().getFilesDir(),"config.txt");
+                    if(file.exists()) {
+                        putDataValues();
+                        viewModel.setWeatherData(new CityMoreInfoModal(dataValues[5] + "°C",dataValues[6] + "°C",dataValues[7] + "°C",dataValues[8] + "hPa",dataValues[9] + "hPa",dataValues[10] + "hPa",dataValues[11] + "%", dataValues[12]));
+                    }
                     Toast.makeText(getActivity(), "No conneection",Toast.LENGTH_SHORT).show();
                 }
                 else
